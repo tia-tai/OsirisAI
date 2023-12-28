@@ -1,8 +1,12 @@
 import customtkinter
 import speech_recognition as sr
+import pyttsx3
 
 
-customtkinter.set_appearance_mode("Dark")
+customtkinter.set_appearance_mode("System")
+engine = pyttsx3.init()
+voices = engine.getProperty("voices")
+engine.setProperty("voice", voices[1].id)
 
 
 class OsirisUI(customtkinter.CTk):
@@ -54,6 +58,7 @@ class OsirisUI(customtkinter.CTk):
             command=self.change_appearance_mode,
         )
         self.appearance_mode_option.grid(row=6, column=0, padx=20, pady=(10, 10))
+        self.appearance_mode_option.set("System")
 
         self.scaling = customtkinter.CTkLabel(
             self.sidebar_frame,
@@ -67,22 +72,33 @@ class OsirisUI(customtkinter.CTk):
             values=["80%", "90%", "100%", "110%", "120%"],
             command=self.change_scaling,
         )
+        self.scaling_option.set("100%")
         self.scaling_option.grid(row=8, column=0, padx=20, pady=(10, 20))
 
+        self.recordbox = customtkinter.CTkTextbox(self, width=200)
+        self.recordbox.grid(row=0, column=1, padx=(20, 0), pady=(20, 0), sticky="nsew")
+        self.responsebox = customtkinter.CTkTextbox(self, width=200)
+        self.responsebox.grid(
+            row=1, column=1, padx=(20, 0), pady=(20, 0), sticky="nsew"
+        )
+
     # Record Voice to String
+
+    def speak(self, audio):
+        engine.say(audio)
+        engine.runAndWait()
 
     def record(self):
         r = sr.Recognizer()
         with sr.Microphone() as source:
-            print("listening")
+            self.speak("Listening...")
             audio = r.listen(source)
-
         try:
-            print(text=r.recognize_google(audio))
+            self.recordbox.insert("0.0", text=r.recognize_google(audio))
         except sr.UnknownValueError:
-            print("Unknown")
+            self.recordbox.insert("0.0", text="Unknown")
         except sr.RequestError as e:
-            print(e)
+            self.responsebox.insert("0.0", text=e)
 
     def change_appearance_mode(self, appearance_mode: str):
         customtkinter.set_appearance_mode(appearance_mode)
