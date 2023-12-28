@@ -1,3 +1,4 @@
+import stat
 import customtkinter
 import speech_recognition as sr
 import pyttsx3
@@ -75,9 +76,13 @@ class OsirisUI(customtkinter.CTk):
         self.scaling_option.set("100%")
         self.scaling_option.grid(row=8, column=0, padx=20, pady=(10, 20))
 
-        self.recordbox = customtkinter.CTkTextbox(self, width=200)
+        self.recordbox = customtkinter.CTkTextbox(
+            self, width=200, state="disabled", wrap="word", activate_scrollbars="n"
+        )
         self.recordbox.grid(row=0, column=1, padx=(20, 0), pady=(20, 0), sticky="nsew")
-        self.responsebox = customtkinter.CTkTextbox(self, width=200)
+        self.responsebox = customtkinter.CTkTextbox(
+            self, width=200, state="disabled", wrap="word", activate_scrollbars="n"
+        )
         self.responsebox.grid(
             row=1, column=1, padx=(20, 0), pady=(20, 0), sticky="nsew"
         )
