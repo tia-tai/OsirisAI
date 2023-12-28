@@ -71,19 +71,18 @@ class OsirisUI(customtkinter.CTk):
 
     # Record Voice to String
 
+    def record(self):
+        r = sr.Recognizer()
+        with sr.Microphone() as source:
+            print("listening")
+            audio = r.listen(source)
 
-def record(self):
-    r = sr.Recognizer()
-    with sr.Microphone() as source:
-        print("listening")
-        audio = r.listen(source)
-
-    try:
-        print(text=r.recognize_google(audio))
-    except sr.UnknownValueError:
-        print("Unknown")
-    except sr.RequestError as e:
-        print(e)
+        try:
+            print(text=r.recognize_google(audio))
+        except sr.UnknownValueError:
+            print("Unknown")
+        except sr.RequestError as e:
+            print(e)
 
     def change_appearance_mode(self, appearance_mode: str):
         customtkinter.set_appearance_mode(appearance_mode)
