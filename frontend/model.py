@@ -5,7 +5,7 @@ import pyttsx3
 
 sys.path.insert(0, "C:/Users/adopt/OneDrive/Documents/Project Osiris/backend")
 
-from core import gpt_response_generator
+from core import gpt_response_generator  # noqa: E402
 
 customtkinter.set_appearance_mode("System")
 engine = pyttsx3.init()
