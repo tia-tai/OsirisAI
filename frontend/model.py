@@ -1,7 +1,11 @@
+import sys
 import customtkinter
 import speech_recognition as sr
 import pyttsx3
 
+sys.path.insert(0, "C:/Users/adopt/OneDrive/Documents/Project Osiris/backend")
+
+from core import gpt_response_generator
 
 customtkinter.set_appearance_mode("System")
 engine = pyttsx3.init()
@@ -16,7 +20,7 @@ class OsirisUI(customtkinter.CTk):
         # New Window
         self.title("Osiris")
         self.geometry("1100x580")
-        self.iconbitmap("gui/icon.ico")
+        self.iconbitmap("frontend/icon.ico")
         self.grid_columnconfigure(1, weight=1)
         self.grid_columnconfigure((2, 3), weight=0)
         self.grid_rowconfigure((0, 1, 2), weight=1)
@@ -76,11 +80,11 @@ class OsirisUI(customtkinter.CTk):
         self.scaling_option.grid(row=8, column=0, padx=20, pady=(10, 20))
 
         self.recordbox = customtkinter.CTkTextbox(
-            self, width=200, state="disabled", wrap="word", activate_scrollbars="n"
+            self, width=200, wrap="word", activate_scrollbars="n"
         )
         self.recordbox.grid(row=0, column=1, padx=(20, 0), pady=(20, 0), sticky="nsew")
         self.responsebox = customtkinter.CTkTextbox(
-            self, width=200, state="disabled", wrap="word", activate_scrollbars="n"
+            self, width=200, wrap="word", activate_scrollbars="n"
         )
         self.responsebox.grid(
             row=1, column=1, padx=(20, 0), pady=(20, 0), sticky="nsew"
@@ -99,6 +103,9 @@ class OsirisUI(customtkinter.CTk):
             audio = r.listen(source)
         try:
             self.recordbox.insert("0.0", text=r.recognize_google(audio))
+            response = gpt_response_generator(r.recognize_google(audio))
+            self.speak(response)
+            self.responsebox.insert("0.0", text=response)
         except sr.UnknownValueError:
             self.recordbox.insert("0.0", text="Unknown")
         except sr.RequestError as e:
