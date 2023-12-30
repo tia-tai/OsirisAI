@@ -2,6 +2,9 @@ import sys
 import customtkinter
 import speech_recognition as sr
 import pyttsx3
+import threading
+
+from sympy import root
 
 sys.path.insert(0, "C:/Users/adopt/OneDrive/Documents/Project Osiris/backend")
 
@@ -38,7 +41,7 @@ class OsirisUI(customtkinter.CTk):
 
         self.speech_btn = customtkinter.CTkButton(
             self.sidebar_frame,
-            command=self.record,
+            command=lambda: self.start_record(None),
             text="Speak",
         )
         self.speech_btn.grid(row=1, column=0, padx=20, pady=10)
@@ -80,11 +83,11 @@ class OsirisUI(customtkinter.CTk):
         self.scaling_option.grid(row=8, column=0, padx=20, pady=(10, 20))
 
         self.recordbox = customtkinter.CTkTextbox(
-            self, width=200, wrap="word", activate_scrollbars="n"
+            self, width=200, wrap="word", activate_scrollbars="n", state="disabled"
         )
         self.recordbox.grid(row=0, column=1, padx=(20, 0), pady=(20, 0), sticky="nsew")
         self.responsebox = customtkinter.CTkTextbox(
-            self, width=200, wrap="word", activate_scrollbars="n"
+            self, width=200, wrap="word", activate_scrollbars="n", state="disabled"
         )
         self.responsebox.grid(
             row=1, column=1, padx=(20, 0), pady=(20, 0), sticky="nsew"
@@ -101,15 +104,43 @@ class OsirisUI(customtkinter.CTk):
         with sr.Microphone() as source:
             self.speak("Listening...")
             audio = r.listen(source)
+            self.recordbox.configure(state="normal")
+            self.recordbox.delete("0.0", "end")
+            self.responsebox.configure(state="normal")
+            self.responsebox.delete("0.0", "end")
+
         try:
             self.recordbox.insert("0.0", text=r.recognize_google(audio))
+            self.recordbox.configure(state="disabled")
             response = gpt_response_generator(r.recognize_google(audio))
-            self.speak(response)
             self.responsebox.insert("0.0", text=response)
+            self.responsebox.configure(state="disabled")
+            self.speak(response)
         except sr.UnknownValueError:
             self.recordbox.insert("0.0", text="Unknown")
+            self.recordbox.configure(state="disabled")
         except sr.RequestError as e:
             self.responsebox.insert("0.0", text=e)
+            self.responsebox.configure(state="disabled")
+
+    # Run record in a seperate thread to prevent the application from freezing
+    def start_record(self, event):
+        global record_thread
+        record_thread = threading.Thread(target=self.record)
+        record_thread.daemon = True
+        self.progressbar.configure(mode="indeterminate")
+        self.progressbar.start()
+        record_thread.start()
+        self.after(20, self.stop_record)
+
+    # Checks if the record thread is still alive and runs the function again if it is
+    def stop_record(self):
+        if record_thread.is_alive():
+            self.after(20, self.stop_record)
+        else:
+            self.progressbar.configure(mode="determinate")
+            self.progressbar.set(1)
+            self.progressbar.stop()
 
     def change_appearance_mode(self, appearance_mode: str):
         customtkinter.set_appearance_mode(appearance_mode)
