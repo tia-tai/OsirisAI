@@ -4,8 +4,6 @@ import speech_recognition as sr
 import pyttsx3
 import threading
 
-from sympy import root
-
 sys.path.insert(0, "C:/Users/adopt/OneDrive/Documents/Project Osiris/backend")
 
 from core import gpt_response_generator  # noqa: E402
