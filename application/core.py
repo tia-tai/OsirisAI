@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Create a .env file for your OpenAI API key
-client = openai.OpenAI(api_key=os.getenv("API_KEY"))
+client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 
 # Openai GPT-3.5-Turbo Response Generator

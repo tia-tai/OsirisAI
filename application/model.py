@@ -1,7 +1,7 @@
 import customtkinter
-import speech_recognition as sr
 import pyttsx3
 import threading
+import speech_recognition as sr
 from core import gpt_response_generator  # noqa: E402
 
 customtkinter.set_appearance_mode("System")
