@@ -1,11 +1,7 @@
-import sys
 import customtkinter
 import speech_recognition as sr
 import pyttsx3
 import threading
-
-sys.path.insert(0, "C:/Users/adopt/OneDrive/Documents/ProjectOsiris/backend")
-
 from core import gpt_response_generator  # noqa: E402
 
 customtkinter.set_appearance_mode("System")
@@ -21,7 +17,7 @@ class OsirisUI(customtkinter.CTk):
         # New Window
         self.title("Osiris")
         self.geometry("1100x580")
-        self.iconbitmap("frontend/icon.ico")
+        self.iconbitmap("application/icon.ico")
         self.grid_columnconfigure(1, weight=1)
         self.grid_columnconfigure((2, 3), weight=0)
         self.grid_rowconfigure((0, 1, 2), weight=1)
