@@ -5,9 +5,9 @@ import speech_recognition as sr
 from core import gpt_response_generator  # noqa: E402
 
 customtkinter.set_appearance_mode("System")
-engine = pyttsx3.init()
-voices = engine.getProperty("voices")
-engine.setProperty("voice", voices[1].id)
+engine = pyttsx3.init('sapi5')
+engine.setProperty("voice", "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_DAVID_11.0")
+engine.setProperty("rate", 250)
 
 
 class OsirisUI(customtkinter.CTk):
