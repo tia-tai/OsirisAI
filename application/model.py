@@ -8,6 +8,7 @@ customtkinter.set_appearance_mode("System")
 engine = pyttsx3.init('sapi5')
 engine.setProperty("voice", "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_DAVID_11.0")
 engine.setProperty("rate", 250)
+engine.setProperty("pitch", 1.0)
 
 
 class OsirisUI(customtkinter.CTk):
