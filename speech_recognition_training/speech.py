@@ -11,12 +11,11 @@ notebook_login()
 
 # wav2vec2 is programmed to return results in uppercase
 def to_Upper(datum):
-    return {"transcription": datum["transcription"].upper()}
+    return {"text": datum["text"].upper()}
 
 
-data = load_dataset("PolyAI/minds14", name="en-US", split="train[:20]")
+data = load_dataset("MLCommons/peoples_speech", name="clean", split="train[:1000]")
 data = data.train_test_split(test_size=0.2)
-data = data.remove_columns(["english_transcription", "intent_class", "lang_id"])
 data = data.cast_column("audio", Audio(sampling_rate=16000))
 data = data.map(to_Upper)
 
@@ -28,13 +27,15 @@ def prepare_dataset(batch):
     batch = transformer(
         audio["array"],
         sampling_rate=audio["sampling_rate"],
-        text=batch["transcription"],
+        text=batch["text"],
     )
     batch["input_length"] = len(batch["input_values"][0])
     return batch
 
 
-encoded_data = data.map(prepare_dataset, remove_columns=data.column_names["train"])
+encoded_data = data.map(
+    prepare_dataset, remove_columns=data.column_names["train"], num_proc=4
+)
 
 data_collator = DataCollatorCTCWithPadding(transformer=transformer)
 
@@ -58,7 +59,7 @@ trainArgs = TrainingArguments(
     per_device_eval_batch_size=8,
     save_steps=1000,
     eval_steps=1000,
-    logging_steps=25,
+    logging_steps=100,
     load_best_model_at_end=True,
     metric_for_best_model="wer",
     greater_is_better=False,
