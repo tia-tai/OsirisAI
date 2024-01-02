@@ -21,7 +21,7 @@ class OsirisUI(customtkinter.CTk):
         # New Window
         self.title("Osiris")
         self.geometry("1100x580")
-        self.iconbitmap("icon.ico")
+        self.iconbitmap("application/icon.ico")
         self.grid_columnconfigure(1, weight=1)
         self.grid_columnconfigure((2, 3), weight=0)
         self.grid_rowconfigure((0, 1, 2), weight=1)
