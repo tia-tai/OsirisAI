@@ -1,4 +1,5 @@
 # Run on Google Collab if you don't have a GPU
+# Takes way too long, would be best if you had a dedicated GPU
 
 from datasets import load_dataset, Audio
 from transformers import AutoProcessor, AutoModelForCTC, TrainingArguments, Trainer
