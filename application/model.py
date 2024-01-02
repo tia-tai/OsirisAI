@@ -2,9 +2,6 @@ import customtkinter
 import pyttsx3
 import threading
 import speech_recognition as sr
-<<<<<<< HEAD
-from core import gpt_response_generator  # noqa: E402
-=======
 import openai
 import os
 from dotenv import load_dotenv
@@ -23,8 +20,6 @@ def gpt_response_generator(prompt):
 
     return response.choices[0].message.content.strip()
 
->>>>>>> 64c5a89 (first commit)
-
 customtkinter.set_appearance_mode("System")
 engine = pyttsx3.init("sapi5")
 engine.setProperty(
@@ -42,11 +37,7 @@ class OsirisUI(customtkinter.CTk):
         # New Window
         self.title("Osiris")
         self.geometry("1100x580")
-<<<<<<< HEAD
         self.iconbitmap("application/icon.ico")
-=======
-        self.iconbitmap("icon.ico")
->>>>>>> 64c5a89 (first commit)
         self.grid_columnconfigure(1, weight=1)
         self.grid_columnconfigure((2, 3), weight=0)
         self.grid_rowconfigure((0, 1, 2), weight=1)
